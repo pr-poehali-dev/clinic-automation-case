@@ -1,24 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/ui/icon";
 
-function useCountUp(target: number, duration: number = 2000, start: boolean = false) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let startTime: number | null = null;
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * target));
-      if (progress < 1) requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
-  }, [target, duration, start]);
-  return count;
-}
-
-function useInView(threshold = 0.2) {
+function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -32,58 +15,126 @@ function useInView(threshold = 0.2) {
   return { ref, inView };
 }
 
-function MetricCard({ value, suffix, label, delay }: { value: number; suffix: string; label: string; delay: number }) {
+function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+  const { ref, inView } = useInView(0.1);
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateY(0)" : "translateY(36px)",
+        transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function useCountUp(target: number, duration = 1800, start = false) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let t: number | null = null;
+    const run = (ts: number) => {
+      if (!t) t = ts;
+      const p = Math.min((ts - t) / duration, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      setCount(Math.floor(e * target));
+      if (p < 1) requestAnimationFrame(run);
+    };
+    requestAnimationFrame(run);
+  }, [target, duration, start]);
+  return count;
+}
+
+function AnimNum({ value, suffix }: { value: number; suffix: string }) {
   const { ref, inView } = useInView(0.3);
-  const count = useCountUp(value, 1800, inView);
-  const displayValue = value >= 1000000
-    ? (count / 1000000).toFixed(1).replace('.', ',') + " млн"
-    : count.toLocaleString("ru-RU");
+  const count = useCountUp(value, 1600, inView);
   return (
-    <div
-      ref={ref}
-      className="metric-card"
-      style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0) scale(1)' : 'translateY(30px) scale(0.9)', transition: `all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2) ${delay}ms` }}
-    >
-      <div className="metric-value">{displayValue}{value < 1000000 ? suffix : ""}</div>
-      <div className="metric-label">{label}</div>
-    </div>
+    <span ref={ref as React.RefObject<HTMLSpanElement>}>
+      {count.toLocaleString("ru-RU")}{suffix}
+    </span>
   );
 }
 
-function ProblemItem({ icon, text, delay }: { icon: string; text: string; delay: number }) {
-  const { ref, inView } = useInView(0.2);
+const FinanceTable = ({
+  title,
+  badge,
+  badgeColor,
+  revenue,
+  rows,
+  totalExpenses,
+  profit,
+  margin,
+  note,
+}: {
+  title: string;
+  badge: string;
+  badgeColor: string;
+  revenue: string;
+  rows: [string, string][];
+  totalExpenses: string;
+  profit: string;
+  margin: string;
+  note?: string;
+}) => {
+  const { ref, inView } = useInView(0.1);
   return (
     <div
       ref={ref}
-      className="problem-item"
-      style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateX(0)' : 'translateX(-30px)', transition: `all 0.6s ease ${delay}ms` }}
+      className="fin-table-wrap"
+      style={{
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateY(0)" : "translateY(30px)",
+        transition: "all 0.7s ease",
+      }}
     >
-      <div className="problem-icon">{icon}</div>
-      <p>{text}</p>
+      <div className="fin-table-header">
+        <span className={`fin-badge ${badgeColor}`}>{badge}</span>
+        <h3>{title}</h3>
+        <div className="fin-revenue">Выручка: <strong>{revenue}</strong></div>
+      </div>
+      <table className="fin-table">
+        <tbody>
+          {rows.map(([label, val], i) => (
+            <tr key={i}>
+              <td>{label}</td>
+              <td>{val}</td>
+            </tr>
+          ))}
+          <tr className="fin-total">
+            <td>Итого расходы</td>
+            <td>{totalExpenses}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div className="fin-profit">
+        <div>
+          <span>Чистая прибыль</span>
+          <strong>{profit}</strong>
+        </div>
+        <div>
+          <span>Маржа</span>
+          <strong>{margin}</strong>
+        </div>
+      </div>
+      {note && <div className="fin-note">{note}</div>}
     </div>
   );
-}
-
-function SolutionCard({ num, title, desc, delay }: { num: string; title: string; desc: string; delay: number }) {
-  const { ref, inView } = useInView(0.2);
-  return (
-    <div
-      ref={ref}
-      className="solution-card"
-      style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(40px)', transition: `all 0.7s ease ${delay}ms` }}
-    >
-      <div className="solution-num">{num}</div>
-      <h3>{title}</h3>
-      <p>{desc}</p>
-    </div>
-  );
-}
+};
 
 export default function Index() {
   const [heroVisible, setHeroVisible] = useState(false);
-  useEffect(() => { setTimeout(() => setHeroVisible(true), 100); }, []);
-
+  useEffect(() => { setTimeout(() => setHeroVisible(true), 120); }, []);
   const { ref: reviewRef, inView: reviewInView } = useInView(0.2);
+
+  const anim = (delay: number) => ({
+    opacity: heroVisible ? 1 : 0,
+    transform: heroVisible ? "translateY(0)" : "translateY(30px)",
+    transition: `all 0.8s ease ${delay}ms`,
+  });
 
   return (
     <div className="case-page font-golos">
@@ -93,7 +144,7 @@ export default function Index() {
         <div className="nav-inner">
           <span className="nav-tag">
             <span className="nav-dot" />
-            Кейс · Медицина
+            Кейс · Стоматология
           </span>
           <a href="#contact" className="nav-cta">Хочу так же →</a>
         </div>
@@ -108,31 +159,31 @@ export default function Index() {
           <div className="hero-grid" />
         </div>
         <div className="hero-inner">
-          <div className="hero-badge" style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? 'translateY(0)' : 'translateY(20px)', transition: 'all 0.6s ease 0.1s' }}>
+          <div className="hero-badge" style={anim(100)}>
             <span className="badge-dot" />
-            Многопрофильная клиника · Москва · 2024
+            Стоматологическая клиника · 4 кресла
           </div>
-          <h1 className="hero-title font-oswald" style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? 'translateY(0)' : 'translateY(40px)', transition: 'all 0.8s ease 0.3s' }}>
-            Убрали координаторов<br />и РОПа — прибыль<br />
-            <span className="title-accent">выросла на 47%</span>
+          <h1 className="hero-title font-oswald" style={anim(250)}>
+            Убрали координаторов<br />и РОПа, повысили<br />
+            <span className="title-accent">конверсию и прибыль</span>
           </h1>
-          <p className="hero-sub" style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? 'translateY(0)' : 'translateY(30px)', transition: 'all 0.8s ease 0.5s' }}>
-            Как автоматизация ключевых процессов позволила клинике избавиться от лишних звеньев управления и кратно увеличить чистую прибыль
+          <p className="hero-sub" style={anim(400)}>
+            За счёт ИИ-ассистента и системной автоматизации ключевых точек прибыли — без роста управленческого слоя
           </p>
-          <div className="hero-stats" style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? 'translateY(0)' : 'translateY(30px)', transition: 'all 0.8s ease 0.7s' }}>
+          <div className="hero-stats" style={anim(550)}>
             <div className="hero-stat">
-              <strong>+47%</strong>
-              <span>рост прибыли</span>
+              <strong>+117%</strong>
+              <span>рост чистой прибыли</span>
             </div>
             <div className="hero-stat-divider" />
             <div className="hero-stat">
-              <strong>−3,2 млн ₽</strong>
-              <span>экономия в год</span>
+              <strong>17%</strong>
+              <span>маржа (было 3,8%)</span>
             </div>
             <div className="hero-stat-divider" />
             <div className="hero-stat">
-              <strong>8 мес.</strong>
-              <span>окупаемость</span>
+              <strong>+550 000 ₽</strong>
+              <span>прибыли в месяц</span>
             </div>
           </div>
         </div>
@@ -141,116 +192,297 @@ export default function Index() {
         </div>
       </section>
 
-      {/* PROBLEM */}
+      {/* PARADOX */}
       <section className="section-problem">
         <div className="container-inner">
-          <div className="section-label">Проблема</div>
-          <h2 className="section-title font-oswald">
-            Клиника теряла деньги<br />на людях, не на пациентах
-          </h2>
-          <p className="section-desc">
-            До автоматизации клиника держала раздутый штат управленцев, которые создавали видимость работы вместо реального результата.
-          </p>
+          <FadeUp>
+            <div className="section-label">Предпосылки</div>
+            <h2 className="section-title font-oswald">
+              Парадокс стоматологии
+            </h2>
+            <p className="section-desc" style={{ maxWidth: 680 }}>
+              Клиника может быть полной пациентов, врачи — загружены, а прибыль — минимальная или вовсе отсутствует.<br /><br />
+              Мы долго жили внутри этого парадокса.
+            </p>
+          </FadeUp>
+
           <div className="problems-grid">
-            <ProblemItem icon="💸" text="3 координатора и РОП ежемесячно обходились в 540 000 ₽ — при этом конверсия в запись не росла уже 2 года" delay={0} />
-            <ProblemItem icon="📋" text="Ручное расписание: 40% рабочего времени администраторов уходило на звонки, перезаписи и напоминания" delay={100} />
-            <ProblemItem icon="📊" text="Отчётность собиралась 3–4 дня. Решения принимались по устаревшим данным" delay={200} />
-            <ProblemItem icon="🔄" text="Заявки из онлайна терялись — не было единой системы обработки, конверсия составляла 34%" delay={300} />
+            <FadeUp delay={0}>
+              <div className="problem-item" style={{ opacity: 1, transform: "none" }}>
+                <div className="problem-icon">🦷</div>
+                <div>
+                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>Зубная формула</strong>
+                  <p>Заполнялась частично или формально. Данные терялись. Дальнейшие рекомендации не формировались.<br /><em style={{ color: "var(--emerald)", fontSize: 13 }}>А ведь прибыль клиники начинается именно с неё.</em></p>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={100}>
+              <div className="problem-item" style={{ opacity: 1, transform: "none" }}>
+                <div className="problem-icon">📋</div>
+                <div>
+                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>История болезни</strong>
+                  <p>Из 10 пациентов на осмотре: 8 нуждаются в терапии, 6 — в ортопеде/ортодонте, 4 — в хирурге-имплантологе. При плохо заполненной истории — клиника теряет деньги и создаёт юридические риски.</p>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={200}>
+              <div className="problem-item" style={{ opacity: 1, transform: "none" }}>
+                <div className="problem-icon">📄</div>
+                <div>
+                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>План лечения</strong>
+                  <p>Каждый врач составлял по-своему. Не было стандарта. Пациенту сложно было понять объём и ценность лечения. Упаковка плана часто отсутствовала.<br /><em style={{ color: "var(--emerald)", fontSize: 13 }}>Итог — низкая конверсия в повторный приём.</em></p>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={300}>
+              <div className="problem-item" style={{ opacity: 1, transform: "none" }}>
+                <div className="problem-icon">👥</div>
+                <div>
+                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>Координаторы — первое «решение»</strong>
+                  <p>Выручка выросла на 20–25%. Но вскрылась реальность: зарплаты координаторов + рост затрат на врачей + РОП для контроля над координаторами. <em style={{ color: "#fca5a5", fontSize: 13 }}>Зарабатывали все, кроме клиники.</em></p>
+                </div>
+              </div>
+            </FadeUp>
           </div>
+        </div>
+      </section>
+
+      {/* INSIGHT */}
+      <section className="section-insight">
+        <div className="container-inner">
+          <FadeUp>
+            <div className="insight-card">
+              <div className="insight-icon">💡</div>
+              <h3 className="font-oswald">Ключевой инсайт</h3>
+              <p>
+                Мы лечили последствия, а не причину.<br />
+                Проблема была не в людях — а в <strong>отсутствии механизма</strong>, который стандартизирует процессы, снижает зависимость от человеческого фактора и работает одинаково у всех врачей.
+              </p>
+            </div>
+          </FadeUp>
         </div>
       </section>
 
       {/* SOLUTION */}
       <section className="section-solution">
         <div className="container-inner">
-          <div className="section-label accent">Решение</div>
-          <h2 className="section-title font-oswald">
-            4 шага к полной<br />автоматизации
-          </h2>
+          <FadeUp>
+            <div className="section-label accent">Решение</div>
+            <h2 className="section-title font-oswald">
+              Системная автоматизация<br />ключевых точек прибыли
+            </h2>
+          </FadeUp>
           <div className="solutions-grid">
-            <SolutionCard num="01" title="Умная запись на приём" desc="Внедрили чат-бот и онлайн-запись с автоматическими напоминаниями. Пациент записывается за 2 минуты, система сама заполняет расписание врача." delay={0} />
-            <SolutionCard num="02" title="CRM-воронка вместо РОПа" desc="Настроили автоматическую обработку заявок: приоритизация, распределение, скрипты для администраторов. РОП стал не нужен." delay={100} />
-            <SolutionCard num="03" title="Дашборд в реальном времени" desc="Руководитель видит все ключевые метрики в одном экране: выручка, загрузка врачей, конверсии — данные обновляются каждые 15 минут." delay={200} />
-            <SolutionCard num="04" title="Авто-напоминания и возврат" desc="Система сама напоминает о визитах, собирает NPS, возвращает пациентов на повторный приём. Без участия координаторов." delay={300} />
+            <FadeUp delay={0}>
+              <div className="solution-card" style={{ opacity: 1, transform: "none" }}>
+                <div className="solution-num">🤖</div>
+                <h3>ИИ-ассистент Федя</h3>
+                <p>Помогает корректно заполнять зубную формулу, структурировать историю болезни, автоматически формировать рекомендации к смежным специалистам и собирать стандартизированный план лечения.</p>
+              </div>
+            </FadeUp>
+            <FadeUp delay={120}>
+              <div className="solution-card" style={{ opacity: 1, transform: "none" }}>
+                <div className="solution-num">🔗</div>
+                <h3>Интеграция с Future Care 360</h3>
+                <p>Упаковывает план лечения для пациента, сопровождает коммуникациями, конвертирует рекомендации в повторные приёмы — без участия координаторов.</p>
+              </div>
+            </FadeUp>
           </div>
         </div>
       </section>
 
-      {/* METRICS */}
-      <section className="section-metrics">
+      {/* RESULTS TEXT */}
+      <section className="section-results-text">
+        <div className="container-inner">
+          <FadeUp>
+            <div className="section-label">Результаты</div>
+            <h2 className="section-title font-oswald">
+              Что изменилось<br />на практике
+            </h2>
+          </FadeUp>
+          <div className="results-list">
+            {[
+              ["✅", "Отказались от координаторов"],
+              ["✅", "Отказались от РОПа"],
+              ["✅", "Процессы стали едиными и управляемыми"],
+              ["✅", "Снизилась зависимость от конкретных сотрудников"],
+              ["✅", "Выросла конверсия в повторные приёмы"],
+              ["✅", "Прибыль начала оставаться в клинике, а не растворяться в управленческих надстройках"],
+            ].map(([icon, text], i) => (
+              <FadeUp key={i} delay={i * 80}>
+                <div className="result-row" style={{ opacity: 1, transform: "none" }}>
+                  <span className="result-icon">{icon}</span>
+                  <span>{text}</span>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FINANCE TABLES */}
+      <section className="section-finance">
         <div className="metrics-glow" />
         <div className="container-inner">
-          <div className="section-label light">Метрики</div>
-          <h2 className="section-title font-oswald metrics-title">
-            Цифры говорят<br />сами за себя
-          </h2>
-          <div className="metrics-grid">
-            <MetricCard value={47} suffix="%" label="рост чистой прибыли" delay={0} />
-            <MetricCard value={3200000} suffix=" ₽" label="экономия на персонале в год" delay={150} />
-            <MetricCard value={340} suffix="%" label="ROI автоматизации" delay={300} />
-            <MetricCard value={8} suffix=" мес" label="срок окупаемости" delay={450} />
-            <MetricCard value={78} suffix="%" label="конверсия в запись (было 34%)" delay={600} />
-            <MetricCard value={92} suffix="%" label="пациентов возвращаются повторно" delay={750} />
+          <FadeUp>
+            <div className="section-label light">Цифры</div>
+            <h2 className="section-title font-oswald metrics-title">
+              Экономическая модель<br />клиники 4 кресла
+            </h2>
+          </FadeUp>
+          <div className="fin-tables-grid">
+            <FinanceTable
+              title="До автоматизации"
+              badge="Базовая модель"
+              badgeColor="badge-neutral"
+              revenue="3 200 000 ₽"
+              rows={[
+                ["Врачи 25%", "800 000 ₽"],
+                ["Лаборатория 15%", "480 000 ₽"],
+                ["Расходники 15%", "480 000 ₽"],
+                ["Младший медперсонал", "325 000 ₽"],
+                ["Администраторы", "150 000 ₽"],
+                ["Бухгалтер", "40 000 ₽"],
+                ["Управляющий", "100 000 ₽"],
+                ["Главный врач", "100 000 ₽"],
+                ["Аренда", "200 000 ₽"],
+                ["Иные расходы", "200 000 ₽"],
+              ]}
+              totalExpenses="2 875 000 ₽"
+              profit="325 000 ₽"
+              margin="10%"
+            />
+            <FinanceTable
+              title="С координаторами + РОП"
+              badge="Выручка выросла"
+              badgeColor="badge-warning"
+              revenue="4 100 000 ₽"
+              rows={[
+                ["Врачи 25%", "1 025 000 ₽"],
+                ["Лаборатория 15%", "615 000 ₽"],
+                ["Расходники 15%", "615 000 ₽"],
+                ["Младший медперсонал", "350 000 ₽"],
+                ["Администраторы", "150 000 ₽"],
+                ["Координаторы", "350 000 ₽"],
+                ["РОП", "200 000 ₽"],
+                ["Бухгалтер", "40 000 ₽"],
+                ["Управляющий", "100 000 ₽"],
+                ["Главный врач", "100 000 ₽"],
+                ["Аренда", "200 000 ₽"],
+                ["Иные расходы", "200 000 ₽"],
+              ]}
+              totalExpenses="3 945 000 ₽"
+              profit="155 000 ₽"
+              margin="3,8%"
+              note="📉 Выручка выросла — прибыль почти исчезла"
+            />
+            <FinanceTable
+              title="После автоматизации"
+              badge="Оптимальная модель"
+              badgeColor="badge-success"
+              revenue="4 100 000 ₽"
+              rows={[
+                ["Врачи 25%", "1 025 000 ₽"],
+                ["Лаборатория 15%", "615 000 ₽"],
+                ["Расходники 15%", "615 000 ₽"],
+                ["Младший медперсонал", "350 000 ₽"],
+                ["Администраторы", "150 000 ₽"],
+                ["Бухгалтер", "40 000 ₽"],
+                ["Управляющий", "100 000 ₽"],
+                ["Главный врач", "100 000 ₽"],
+                ["Аренда", "200 000 ₽"],
+                ["Иные расходы", "200 000 ₽"],
+              ]}
+              totalExpenses="3 395 000 ₽"
+              profit="705 000 ₽"
+              margin="17%"
+              note="📈 Та же выручка — маржа выросла в 4,5 раза"
+            />
+          </div>
+
+          {/* COMPARISON */}
+          <FadeUp delay={200}>
+            <div className="compare-summary">
+              <h3 className="font-oswald">Сравнение моделей</h3>
+              <div className="compare-summary-grid">
+                <div className="cs-row cs-head">
+                  <span>Модель</span>
+                  <span>Прибыль</span>
+                  <span>Маржа</span>
+                </div>
+                <div className="cs-row">
+                  <span>До автоматизации</span>
+                  <span>325 000 ₽</span>
+                  <span>10%</span>
+                </div>
+                <div className="cs-row cs-bad">
+                  <span>С координаторами</span>
+                  <span>155 000 ₽ ↓</span>
+                  <span>3,8%</span>
+                </div>
+                <div className="cs-row cs-good">
+                  <span>Автоматизация</span>
+                  <span>705 000 ₽ ↑</span>
+                  <span>17%</span>
+                </div>
+              </div>
+              <div className="cs-highlight">
+                <Icon name="TrendingUp" size={24} />
+                <div>
+                  <strong>+550 000 ₽ в месяц</strong>
+                  <span>Автоматизация vs координаторы · <em>6 600 000 ₽ в год</em></span>
+                </div>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* WHY IT WORKED */}
+      <section className="section-why">
+        <div className="container-inner">
+          <FadeUp>
+            <div className="section-label accent">Почему сработало</div>
+            <h2 className="section-title font-oswald">
+              Убрали причину,<br />а не следствие
+            </h2>
+          </FadeUp>
+          <div className="why-grid">
+            {[
+              { icon: "🎯", text: "Стандартизировали то, что раньше было «на усмотрение врача»" },
+              { icon: "🤖", text: "Убрали человеческий фактор из ключевых точек прибыли" },
+              { icon: "💊", text: "Перевели логику «продаж» в медицинскую и процессную плоскость" },
+              { icon: "🔁", text: "Связали клинические данные с коммуникациями и повторными визитами" },
+            ].map(({ icon, text }, i) => (
+              <FadeUp key={i} delay={i * 100}>
+                <div className="why-card" style={{ opacity: 1, transform: "none" }}>
+                  <span className="why-icon">{icon}</span>
+                  <p>{text}</p>
+                </div>
+              </FadeUp>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* RESULTS */}
-      <section className="section-results">
+      {/* CONCLUSION */}
+      <section className="section-conclusion">
         <div className="container-inner">
-          <div className="section-label">Результаты</div>
-          <h2 className="section-title font-oswald">До и после: реальные изменения</h2>
-          <div className="compare-table">
-            <div className="compare-col compare-before">
-              <div className="compare-head before-head">
-                <Icon name="X" size={14} />
-                До автоматизации
+          <FadeUp>
+            <div className="conclusion-card">
+              <div className="section-label" style={{ marginBottom: 20 }}>Главный вывод</div>
+              <h3 className="font-oswald">
+                В стоматологии нельзя бесконечно наращивать людей,<br />чтобы компенсировать плохие процессы
+              </h3>
+              <div className="conclusion-list">
+                <p>Если зубная формула заполняется формально, история болезни не структурирована, план лечения не упакован — координаторы и РОПы <strong>лишь маскируют проблему</strong>, а не решают её.</p>
+                <p>ИИ-ассистент и системная автоматизация позволяют повысить конверсию, снизить расходы и сделать бизнес управляемым.</p>
               </div>
-              <div className="compare-item">540 000 ₽/мес на координаторов и РОПа</div>
-              <div className="compare-item">Конверсия в запись — 34%</div>
-              <div className="compare-item">Отчёт готовится 3–4 дня</div>
-              <div className="compare-item">40% времени персонала — ручная работа</div>
-              <div className="compare-item">Потеря 20–30% онлайн-заявок</div>
-              <div className="compare-item">Возврат пациентов — случайный</div>
-            </div>
-            <div className="compare-col compare-after">
-              <div className="compare-head after-head">
-                <Icon name="Check" size={14} />
-                После автоматизации
-              </div>
-              <div className="compare-item">Те же задачи выполняет система за 0 ₽/мес</div>
-              <div className="compare-item">Конверсия в запись — 78% (+129%)</div>
-              <div className="compare-item">Данные онлайн, обновление каждые 15 минут</div>
-              <div className="compare-item">Персонал фокусируется только на пациентах</div>
-              <div className="compare-item">0 потерянных заявок, всё в CRM</div>
-              <div className="compare-item">Автоматический возврат — 92% пациентов</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* REVIEW */}
-      <section className="section-review">
-        <div className="container-inner">
-          <div className="section-label">Отзыв</div>
-          <div
-            ref={reviewRef}
-            className="review-card"
-            style={{ opacity: reviewInView ? 1 : 0, transform: reviewInView ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.97)', transition: 'all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1)' }}
-          >
-            <div className="review-quote">"</div>
-            <blockquote>
-              Честно говоря, я не верил, что это возможно. Мы 7 лет держали РОПа и трёх координаторов — казалось, без них всё рухнет. Через 3 месяца после внедрения я понял: они создавали работу для самих себя. Сейчас клиника работает ровнее, прибыль выросла, а я наконец вижу реальные цифры каждый день. Жалею только об одном — что не сделал это раньше.
-            </blockquote>
-            <div className="review-author">
-              <div className="review-avatar">АК</div>
-              <div className="review-author-info">
-                <strong>Андрей Климов</strong>
-                <span>Владелец многопрофильной клиники, г. Москва</span>
+              <div className="conclusion-cta">
+                И именно в этот момент стоматология перестаёт быть <em>«ручным ремеслом»</em> и становится <strong>системным бизнесом.</strong>
               </div>
             </div>
-            <div className="review-stars">★★★★★</div>
-          </div>
+          </FadeUp>
         </div>
       </section>
 
@@ -258,8 +490,8 @@ export default function Index() {
       <section className="section-contact" id="contact">
         <div className="contact-glow-1" />
         <div className="contact-glow-2" />
-        <div className="container-inner">
-          <div className="section-label light">Контакты</div>
+        <div className="container-inner" style={{ textAlign: "center" }}>
+          <div className="section-label light" style={{ display: "inline-block" }}>Контакты</div>
           <h2 className="section-title font-oswald contact-title">
             Хотите такие же<br />результаты?
           </h2>
@@ -284,7 +516,7 @@ export default function Index() {
       {/* FOOTER */}
       <footer className="case-footer">
         <div className="container-inner footer-inner">
-          <span>© 2024 · Автоматизация медицинских клиник</span>
+          <span>© 2024 · Автоматизация стоматологических клиник</span>
           <span className="footer-link">Политика конфиденциальности</span>
         </div>
       </footer>
