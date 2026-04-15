@@ -3,54 +3,36 @@ import { FadeUp } from "./shared";
 export default function ProblemSection() {
   return (
     <>
-      {/* PARADOX */}
       <section className="section-problem">
         <div className="container-inner">
           <FadeUp>
-            <div className="section-label">Предпосылки</div>
+            <div className="section-label">Исходная проблема</div>
             <h2 className="section-title font-oswald">
-              Парадокс стоматологии
+              Реклама приводила пациентов.<br />Экономика не сходилась.
             </h2>
             <p className="section-desc" style={{ maxWidth: 680 }}>
-              Клиника может быть полной пациентов, врачи — загружены, а прибыль — минимальная или вовсе отсутствует.<br /><br />
-              Мы долго жили внутри этого парадокса.
+              В стоматологии имплантация — одна из самых маржинальных услуг.<br />
+              Но в реальности она часто становится убыточной, если привлекать пациентов напрямую через рекламу.<br /><br />
+              Мы столкнулись с этим на практике.
             </p>
           </FadeUp>
 
           <div className="problems-grid">
             <FadeUp delay={0}>
               <div className="problem-item" style={{ opacity: 1, transform: "none" }}>
-                <div className="problem-icon">🦷</div>
+                <div className="problem-icon">📉</div>
                 <div>
-                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>Зубная формула</strong>
-                  <p>Заполнялась частично или формально. Данные терялись. Дальнейшие рекомендации не формировались.<br /><em style={{ color: "var(--emerald)", fontSize: 13 }}>А ведь прибыль клиники начинается именно с неё.</em></p>
+                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>Высокая цена клика в Директе</strong>
+                  <p>В сегменте имплантации стоимость одного клика в Яндекс Директе крайне высокая. CPP пациента на имплантацию: от 43 000 до 60 000 ₽.<em style={{ color: "#fca5a5", fontSize: 13, display: "block", marginTop: 6 }}>Реклама приводила пациента — но клиника уходила в минус.</em></p>
                 </div>
               </div>
             </FadeUp>
             <FadeUp delay={100}>
               <div className="problem-item" style={{ opacity: 1, transform: "none" }}>
-                <div className="problem-icon">📋</div>
+                <div className="problem-icon">🦷</div>
                 <div>
-                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>История болезни</strong>
-                  <p>Из 10 пациентов на осмотре: 8 нуждаются в терапии, 6 — в ортопеде/ортодонте, 4 — в хирурге-имплантологе. При плохо заполненной истории — клиника теряет деньги и создаёт юридические риски.</p>
-                </div>
-              </div>
-            </FadeUp>
-            <FadeUp delay={200}>
-              <div className="problem-item" style={{ opacity: 1, transform: "none" }}>
-                <div className="problem-icon">📄</div>
-                <div>
-                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>План лечения</strong>
-                  <p>Каждый врач составлял по-своему. Не было стандарта. Пациенту сложно было понять объём и ценность лечения. Упаковка плана часто отсутствовала.<br /><em style={{ color: "var(--emerald)", fontSize: 13 }}>Итог — низкая конверсия в повторный приём.</em></p>
-                </div>
-              </div>
-            </FadeUp>
-            <FadeUp delay={300}>
-              <div className="problem-item" style={{ opacity: 1, transform: "none" }}>
-                <div className="problem-icon">👥</div>
-                <div>
-                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>Координаторы — первое «решение»</strong>
-                  <p>Выручка выросла на 20–25%. Но вскрылась реальность: зарплаты координаторов + рост затрат на врачей + РОП для контроля над координаторами. <em style={{ color: "#fca5a5", fontSize: 13 }}>Зарабатывали все, кроме клиники.</em></p>
+                  <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>Пациент не готов покупать сразу</strong>
+                  <p>Пациент не просыпается с желанием поставить имплант. Он приходит сначала с проблемой — боль, удаление зуба. Решение об имплантации — отложенное, но предсказуемое.<em style={{ color: "var(--emerald)", fontSize: 13, display: "block", marginTop: 6 }}>Прямая реклама имплантации — не лучший вход в воронку.</em></p>
                 </div>
               </div>
             </FadeUp>
@@ -58,75 +40,44 @@ export default function ProblemSection() {
         </div>
       </section>
 
-      {/* INSIGHT */}
       <section className="section-insight">
         <div className="container-inner">
           <FadeUp>
             <div className="insight-card">
               <div className="insight-icon">💡</div>
-              <h3 className="font-oswald">Ключевой инсайт</h3>
+              <h3 className="font-oswald">Ключевое решение</h3>
               <p>
-                Мы лечили последствия, а не причину.<br />
-                Проблема была не в людях — а в <strong>отсутствии механизма</strong>, который стандартизирует процессы, снижает зависимость от человеческого фактора и работает одинаково у всех врачей.
+                Мы задали себе простой вопрос: а обязательно ли продавать имплантацию «в лоб»?<br /><br />
+                И пришли к выводу: нет. Нужно зайти в путь пациента раньше — <strong>через удаление зуба</strong>.
               </p>
             </div>
           </FadeUp>
         </div>
       </section>
 
-      {/* SOLUTION */}
       <section className="section-solution">
         <div className="container-inner">
           <FadeUp>
-            <div className="section-label accent">Решение</div>
+            <div className="section-label accent">Новый источник трафика</div>
             <h2 className="section-title font-oswald">
-              Системная автоматизация<br />ключевых точек прибыли
+              Воронка через удаление зубов
             </h2>
           </FadeUp>
           <div className="solutions-grid">
             <FadeUp delay={0}>
               <div className="solution-card" style={{ opacity: 1, transform: "none" }}>
-                <div className="solution-num">🤖</div>
-                <h3>ИИ-ассистент Федя</h3>
-                <p>Помогает корректно заполнять зубную формулу, структурировать историю болезни, автоматически формировать рекомендации к смежным специалистам и собирать стандартизированный план лечения.</p>
+                <div className="solution-num">🗺️</div>
+                <h3>Яндекс Карты</h3>
+                <p>Основной поток пациентов на удаление мы получали через Яндекс Карты. Стоимость пациента: <strong style={{ color: "var(--emerald-light)" }}>600–900 ₽</strong> — кратно дешевле, чем реклама имплантации напрямую.</p>
               </div>
             </FadeUp>
             <FadeUp delay={120}>
               <div className="solution-card" style={{ opacity: 1, transform: "none" }}>
-                <div className="solution-num">🔗</div>
-                <h3>Интеграция с Future Care 360</h3>
-                <p>Упаковывает план лечения для пациента, сопровождает коммуникациями, конвертирует рекомендации в повторные приёмы — без участия координаторов.</p>
+                <div className="solution-num">🔁</div>
+                <h3>Автоматические коммуникации</h3>
+                <p>После удаления пациент не продавался сразу. Мы начали сопровождать его через информационные триггеры, которые автоматически отправлялись через систему коммуникаций.</p>
               </div>
             </FadeUp>
-          </div>
-        </div>
-      </section>
-
-      {/* RESULTS TEXT */}
-      <section className="section-results-text">
-        <div className="container-inner">
-          <FadeUp>
-            <div className="section-label">Результаты</div>
-            <h2 className="section-title font-oswald">
-              Что изменилось<br />на практике
-            </h2>
-          </FadeUp>
-          <div className="results-list">
-            {[
-              ["✅", "Отказались от координаторов"],
-              ["✅", "Отказались от РОПа"],
-              ["✅", "Процессы стали едиными и управляемыми"],
-              ["✅", "Снизилась зависимость от конкретных сотрудников"],
-              ["✅", "Выросла конверсия в повторные приёмы"],
-              ["✅", "Прибыль начала оставаться в клинике, а не растворяться в управленческих надстройках"],
-            ].map(([icon, text], i) => (
-              <FadeUp key={i} delay={i * 80}>
-                <div className="result-row" style={{ opacity: 1, transform: "none" }}>
-                  <span className="result-icon">{icon}</span>
-                  <span>{text}</span>
-                </div>
-              </FadeUp>
-            ))}
           </div>
         </div>
       </section>

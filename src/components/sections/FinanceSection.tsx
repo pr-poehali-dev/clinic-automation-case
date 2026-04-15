@@ -1,142 +1,143 @@
+import { FadeUp } from "./shared";
 import Icon from "@/components/ui/icon";
-import { FadeUp, FinanceTable } from "./shared";
+
+const triggers = [
+  {
+    num: "01",
+    days: "Через 7 дней после удаления",
+    goal: "Забота + формирование ожидания",
+    text: `Здравствуйте, Виталий Николаевич!\nНадеемся, что вы чувствуете себя хорошо после удаления зуба.\n\nЧерез 2 месяца мы пригласим вас на бесплатный осмотр состояния костной ткани — это поможет убедиться, что заживление идёт правильно.`,
+    link: "futuresmile-clinic.ru/pamyatka-udalenie-zubov",
+    sign: "С заботой о вас, Future Smile",
+  },
+  {
+    num: "02",
+    days: "Приглашение на контрольный осмотр",
+    goal: "Бесплатный визит + диагностика",
+    text: `Здравствуйте, Зинаида Ивановна!\nПриглашаем вас на контрольный осмотр после удаления зуба.\n\nЭто нужно, чтобы:\n— оценить восстановление костной ткани\n— избежать возможных осложнений\n— спланировать, при необходимости, имплантацию`,
+    link: "futuresmile-clinic.ru/negativ-otsutstvie-zubov",
+    sign: "С уважением, Future Smile",
+  },
+  {
+    num: "03",
+    days: "Если пациент не отреагировал",
+    goal: "Имплантация как логичный шаг",
+    text: `Уважаемый Айк Завенович!\n\nПосле удаления прошло достаточно времени — сейчас оптимальный момент восстановить зуб, чтобы избежать смещения соседних, атрофии кости и перегрузки на другие зубы.\n\nПредлагаем имплантацию под ключ — с гарантией и возможностью рассрочки.\nРаботаем с системами: Straumann, Medentika, Dentium.\n\nБесплатная консультация + КТ-диагностика.\nСкидка 5% + 🎁 1000 бонусов (15 дней).`,
+    link: "futuresmile-clinic.ru/implant",
+    sign: "Future Smile 🍏",
+  },
+  {
+    num: "04",
+    days: "Через 4 месяца после удаления",
+    goal: "Усиление urgency",
+    text: `С момента удаления прошло уже 4 месяца — мы помним о вас и хотим напомнить, что восстановление зуба лучше не откладывать.\n\nЗа это время костная ткань могла начать уменьшаться — это естественный процесс. Чем дольше ждать, тем сложнее и дороже может стать восстановление.\n\nВ знак заботы — дополнительная скидка 5% (15 дней).`,
+    link: "futuresmile-clinic.ru/chto-proishodit-s-kostnoi-tkanyu",
+    sign: "Ваша команда Future Smile 🍏",
+  },
+];
 
 export default function FinanceSection() {
   return (
     <>
-      {/* FINANCE TABLES */}
-      <section className="section-finance">
+      <section className="section-finance" style={{ background: "var(--dark-800)" }}>
         <div className="metrics-glow" />
         <div className="container-inner">
           <FadeUp>
-            <div className="section-label light">Цифры</div>
+            <div className="section-label light">Воронка</div>
             <h2 className="section-title font-oswald metrics-title">
-              Экономическая модель<br />клиники 4 кресла
+              Как была выстроена<br />цепочка триггеров
             </h2>
+            <p className="section-desc">
+              После удаления зуба пациент не продавался сразу — его сопровождали автоматически
+            </p>
           </FadeUp>
-          <div className="fin-tables-grid">
-            <FinanceTable
-              title="До автоматизации"
-              badge="Базовая модель"
-              badgeColor="badge-neutral"
-              revenue="3 200 000 ₽"
-              rows={[
-                ["Врачи 25%", "800 000 ₽"],
-                ["Лаборатория 15%", "480 000 ₽"],
-                ["Расходники 15%", "480 000 ₽"],
-                ["Младший медперсонал", "325 000 ₽"],
-                ["Администраторы", "150 000 ₽"],
-                ["Бухгалтер", "40 000 ₽"],
-                ["Управляющий", "100 000 ₽"],
-                ["Главный врач", "100 000 ₽"],
-                ["Аренда", "200 000 ₽"],
-                ["Иные расходы", "200 000 ₽"],
-              ]}
-              totalExpenses="2 875 000 ₽"
-              profit="325 000 ₽"
-              margin="10%"
-            />
-            <FinanceTable
-              title="С координаторами + РОП"
-              badge="Выручка выросла"
-              badgeColor="badge-warning"
-              revenue="4 100 000 ₽"
-              rows={[
-                ["Врачи 25%", "1 025 000 ₽"],
-                ["Лаборатория 15%", "615 000 ₽"],
-                ["Расходники 15%", "615 000 ₽"],
-                ["Младший медперсонал", "350 000 ₽"],
-                ["Администраторы", "150 000 ₽"],
-                ["Координаторы", "350 000 ₽"],
-                ["РОП", "200 000 ₽"],
-                ["Бухгалтер", "40 000 ₽"],
-                ["Управляющий", "100 000 ₽"],
-                ["Главный врач", "100 000 ₽"],
-                ["Аренда", "200 000 ₽"],
-                ["Иные расходы", "200 000 ₽"],
-              ]}
-              totalExpenses="3 945 000 ₽"
-              profit="155 000 ₽"
-              margin="3,8%"
-              note="📉 Выручка выросла — прибыль почти исчезла"
-            />
-            <FinanceTable
-              title="После автоматизации"
-              badge="Оптимальная модель"
-              badgeColor="badge-success"
-              revenue="4 100 000 ₽"
-              rows={[
-                ["Врачи 25%", "1 025 000 ₽"],
-                ["Лаборатория 15%", "615 000 ₽"],
-                ["Расходники 15%", "615 000 ₽"],
-                ["Младший медперсонал", "350 000 ₽"],
-                ["Администраторы", "150 000 ₽"],
-                ["Бухгалтер", "40 000 ₽"],
-                ["Управляющий", "100 000 ₽"],
-                ["Главный врач", "100 000 ₽"],
-                ["Аренда", "200 000 ₽"],
-                ["Иные расходы", "200 000 ₽"],
-              ]}
-              totalExpenses="3 395 000 ₽"
-              profit="705 000 ₽"
-              margin="17%"
-              note="📈 Та же выручка — маржа выросла в 4,5 раза"
-            />
-          </div>
 
-          {/* COMPARISON */}
-          <FadeUp delay={200}>
-            <div className="compare-summary">
-              <h3 className="font-oswald">Сравнение моделей</h3>
-              <div className="compare-summary-grid">
-                <div className="cs-row cs-head">
-                  <span>Модель</span>
-                  <span>Прибыль</span>
-                  <span>Маржа</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {triggers.map((t, i) => (
+              <FadeUp key={i} delay={i * 100}>
+                <div style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid var(--border-subtle)",
+                  borderRadius: 16,
+                  padding: "28px 32px",
+                  display: "grid",
+                  gridTemplateColumns: "80px 1fr",
+                  gap: 24,
+                  alignItems: "start",
+                }}>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{
+                      fontFamily: "Oswald, sans-serif",
+                      fontSize: 36,
+                      fontWeight: 700,
+                      color: "rgba(16,185,129,0.25)",
+                      lineHeight: 1,
+                      marginBottom: 4,
+                    }}>
+                      {t.num}
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8, flexWrap: "wrap" }}>
+                      <span style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "var(--emerald-light)",
+                        background: "rgba(16,185,129,0.1)",
+                        border: "1px solid rgba(16,185,129,0.25)",
+                        borderRadius: 4,
+                        padding: "2px 8px",
+                        letterSpacing: "0.03em",
+                      }}>
+                        {t.days}
+                      </span>
+                      <span style={{ fontSize: 13, color: "rgba(240,253,244,0.4)" }}>
+                        Цель: {t.goal}
+                      </span>
+                    </div>
+                    <div style={{
+                      background: "rgba(0,0,0,0.25)",
+                      border: "1px solid rgba(16,185,129,0.1)",
+                      borderRadius: 10,
+                      padding: "16px 20px",
+                      fontSize: 14,
+                      color: "rgba(240,253,244,0.75)",
+                      lineHeight: 1.7,
+                      whiteSpace: "pre-line",
+                      marginBottom: 10,
+                    }}>
+                      {t.text}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--emerald)" }}>
+                      <Icon name="Link" size={13} />
+                      <span>{t.link}</span>
+                    </div>
+                    <div style={{ fontSize: 13, color: "rgba(240,253,244,0.4)", marginTop: 6 }}>
+                      {t.sign}
+                    </div>
+                  </div>
                 </div>
-                <div className="cs-row">
-                  <span>До автоматизации</span>
-                  <span>325 000 ₽</span>
-                  <span>10%</span>
-                </div>
-                <div className="cs-row cs-bad">
-                  <span>С координаторами</span>
-                  <span>155 000 ₽ ↓</span>
-                  <span>3,8%</span>
-                </div>
-                <div className="cs-row cs-good">
-                  <span>Автоматизация</span>
-                  <span>705 000 ₽ ↑</span>
-                  <span>17%</span>
-                </div>
-              </div>
-              <div className="cs-highlight">
-                <Icon name="TrendingUp" size={24} />
-                <div>
-                  <strong>+550 000 ₽ в месяц</strong>
-                  <span>Автоматизация vs координаторы · <em>6 600 000 ₽ в год</em></span>
-                </div>
-              </div>
-            </div>
-          </FadeUp>
+              </FadeUp>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* WHY IT WORKED */}
       <section className="section-why">
         <div className="container-inner">
           <FadeUp>
-            <div className="section-label accent">Почему сработало</div>
+            <div className="section-label">Результат</div>
             <h2 className="section-title font-oswald">
-              Убрали причину,<br />а не следствие
+              За 8 месяцев после<br />удаления зуба
             </h2>
           </FadeUp>
-          <div className="why-grid">
+
+          <div className="why-grid" style={{ marginBottom: 60 }}>
             {[
-              { icon: "🎯", text: "Стандартизировали то, что раньше было «на усмотрение врача»" },
-              { icon: "🤖", text: "Убрали человеческий фактор из ключевых точек прибыли" },
-              { icon: "💊", text: "Перевели логику «продаж» в медицинскую и процессную плоскость" },
-              { icon: "🔁", text: "Связали клинические данные с коммуникациями и повторными визитами" },
+              { icon: "📊", text: "80% конверсии в имплантацию" },
+              { icon: "💰", text: "Стоимость лида: 600–900 ₽" },
+              { icon: "🚫", text: "Без прямой рекламы имплантации" },
+              { icon: "🤝", text: "Без давления и агрессивных продаж" },
             ].map(({ icon, text }, i) => (
               <FadeUp key={i} delay={i * 100}>
                 <div className="why-card" style={{ opacity: 1, transform: "none" }}>
@@ -146,24 +147,39 @@ export default function FinanceSection() {
               </FadeUp>
             ))}
           </div>
+
+          <FadeUp delay={200}>
+            <div className="section-label accent">Почему это сработало</div>
+            <div className="why-grid" style={{ marginTop: 24 }}>
+              {[
+                { icon: "1️⃣", text: "Зашли в путь пациента раньше, чем он готов покупать" },
+                { icon: "2️⃣", text: "Не продавали — объясняли и сопровождали" },
+                { icon: "3️⃣", text: "Использовали время как инструмент, а не как врага" },
+                { icon: "4️⃣", text: "Все коммуникации работали автоматически" },
+              ].map(({ icon, text }, i) => (
+                <FadeUp key={i} delay={i * 100}>
+                  <div className="why-card" style={{ opacity: 1, transform: "none" }}>
+                    <span className="why-icon">{icon}</span>
+                    <p>{text}</p>
+                  </div>
+                </FadeUp>
+              ))}
+            </div>
+          </FadeUp>
         </div>
       </section>
 
-      {/* CONCLUSION */}
       <section className="section-conclusion">
         <div className="container-inner">
           <FadeUp>
             <div className="conclusion-card">
-              <div className="section-label" style={{ marginBottom: 20 }}>Главный вывод</div>
+              <div className="section-label" style={{ marginBottom: 20 }}>Вывод</div>
               <h3 className="font-oswald">
-                В стоматологии нельзя бесконечно наращивать людей,<br />чтобы компенсировать плохие процессы
+                Имплантацию не нужно продавать<br />через дорогую рекламу
               </h3>
               <div className="conclusion-list">
-                <p>Если зубная формула заполняется формально, история болезни не структурирована, план лечения не упакован — координаторы и РОПы <strong>лишь маскируют проблему</strong>, а не решают её.</p>
-                <p>ИИ-ассистент и системная автоматизация позволяют повысить конверсию, снизить расходы и сделать бизнес управляемым.</p>
-              </div>
-              <div className="conclusion-cta">
-                И именно в этот момент стоматология перестаёт быть <em>«ручным ремеслом»</em> и становится <strong>системным бизнесом.</strong>
+                <p>Её нужно <strong>выращивать</strong> — через правильную воронку и автоматические коммуникации.</p>
+                <p>Пациент сам придёт к решению, если его правильно сопровождать на каждом этапе после удаления.</p>
               </div>
             </div>
           </FadeUp>
