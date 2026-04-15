@@ -23,7 +23,7 @@ export default function ProblemSection() {
                 <div className="problem-icon">📉</div>
                 <div>
                   <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>Высокая цена клика в Директе</strong>
-                  <p>В сегменте имплантации стоимость одного клика в Яндекс Директе крайне высокая. CPP пациента на имплантацию: от 43 000 до 60 000 ₽.<em style={{ color: "#fca5a5", fontSize: 13, display: "block", marginTop: 6 }}>Реклама приводила пациента — но клиника уходила в минус.</em></p>
+                  <p>В сегменте имплантации стоимость одного клика в Яндекс Директе крайне высокая. CPP пациента на имплантацию: от 43 000 до 60 000 ₽.<em style={{ color: "var(--red)", fontSize: 13, display: "block", marginTop: 6 }}>Реклама приводила пациента — но клиника уходила в минус.</em></p>
                 </div>
               </div>
             </FadeUp>
@@ -32,7 +32,7 @@ export default function ProblemSection() {
                 <div className="problem-icon">🦷</div>
                 <div>
                   <strong style={{ color: "var(--text-primary)", display: "block", marginBottom: 8 }}>Пациент не готов покупать сразу</strong>
-                  <p>Пациент не просыпается с желанием поставить имплант. Он приходит сначала с проблемой — боль, удаление зуба. Решение об имплантации — отложенное, но предсказуемое.<em style={{ color: "var(--emerald)", fontSize: 13, display: "block", marginTop: 6 }}>Прямая реклама имплантации — не лучший вход в воронку.</em></p>
+                  <p>Пациент не просыпается с желанием поставить имплант. Он приходит сначала с проблемой — боль, удаление зуба. Решение об имплантации — отложенное, но предсказуемое.<em style={{ color: "var(--brand)", fontSize: 13, display: "block", marginTop: 6 }}>Прямая реклама имплантации — не лучший вход в воронку.</em></p>
                 </div>
               </div>
             </FadeUp>
@@ -68,7 +68,7 @@ export default function ProblemSection() {
               <div className="solution-card" style={{ opacity: 1, transform: "none" }}>
                 <div className="solution-num">🗺️</div>
                 <h3>Яндекс Карты</h3>
-                <p>Основной поток пациентов на удаление мы получали через Яндекс Карты. Стоимость пациента: <strong style={{ color: "var(--emerald-light)" }}>600–900 ₽</strong> — кратно дешевле, чем реклама имплантации напрямую.</p>
+                <p>Основной поток пациентов на удаление мы получали через Яндекс Карты. Стоимость пациента: <strong style={{ color: "var(--brand-dark)" }}>600–900 ₽</strong> — кратно дешевле, чем реклама имплантации напрямую.</p>
               </div>
             </FadeUp>
             <FadeUp delay={120}>

@@ -39,7 +39,7 @@ const triggers = [
 export default function FinanceSection() {
   return (
     <>
-      <section className="section-finance" style={{ background: "var(--dark-800)" }}>
+      <section className="section-finance">
         <div className="metrics-glow" />
         <div className="container-inner">
           <FadeUp>
@@ -56,63 +56,65 @@ export default function FinanceSection() {
             {triggers.map((t, i) => (
               <FadeUp key={i} delay={i * 100}>
                 <div style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid var(--border-subtle)",
+                  background: "#ffffff",
+                  border: "1px solid var(--border)",
                   borderRadius: 16,
                   padding: "28px 32px",
                   display: "grid",
                   gridTemplateColumns: "80px 1fr",
                   gap: 24,
                   alignItems: "start",
+                  boxShadow: "var(--shadow-sm)",
                 }}>
                   <div style={{ textAlign: "center" }}>
                     <div style={{
                       fontFamily: "Oswald, sans-serif",
-                      fontSize: 36,
+                      fontSize: 40,
                       fontWeight: 700,
-                      color: "rgba(16,185,129,0.25)",
+                      color: "var(--brand-pale)",
                       lineHeight: 1,
-                      marginBottom: 4,
+                      WebkitTextStroke: "2px var(--brand-light)",
                     }}>
                       {t.num}
                     </div>
                   </div>
                   <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8, flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10, flexWrap: "wrap" }}>
                       <span style={{
-                        fontSize: 13,
+                        fontSize: 11,
                         fontWeight: 700,
-                        color: "var(--emerald-light)",
-                        background: "rgba(16,185,129,0.1)",
-                        border: "1px solid rgba(16,185,129,0.25)",
+                        color: "var(--brand-dark)",
+                        background: "var(--brand-pale)",
+                        border: "1px solid rgba(14,165,233,0.25)",
                         borderRadius: 4,
-                        padding: "2px 8px",
-                        letterSpacing: "0.03em",
+                        padding: "3px 10px",
+                        letterSpacing: "0.05em",
+                        textTransform: "uppercase" as const,
                       }}>
                         {t.days}
                       </span>
-                      <span style={{ fontSize: 13, color: "rgba(240,253,244,0.4)" }}>
+                      <span style={{ fontSize: 13, color: "var(--text-muted)" }}>
                         Цель: {t.goal}
                       </span>
                     </div>
                     <div style={{
-                      background: "rgba(0,0,0,0.25)",
-                      border: "1px solid rgba(16,185,129,0.1)",
+                      background: "var(--bg-subtle)",
+                      border: "1px solid var(--border)",
                       borderRadius: 10,
                       padding: "16px 20px",
                       fontSize: 14,
-                      color: "rgba(240,253,244,0.75)",
-                      lineHeight: 1.7,
-                      whiteSpace: "pre-line",
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.75,
+                      whiteSpace: "pre-line" as const,
                       marginBottom: 10,
                     }}>
                       {t.text}
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--emerald)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--brand)" }}>
                       <Icon name="Link" size={13} />
                       <span>{t.link}</span>
                     </div>
-                    <div style={{ fontSize: 13, color: "rgba(240,253,244,0.4)", marginTop: 6 }}>
+                    <div style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 6 }}>
                       {t.sign}
                     </div>
                   </div>
